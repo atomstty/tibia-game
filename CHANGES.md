@@ -2,6 +2,17 @@
 
 This document tracks custom features and modifications made to the game server.
 
+## Build Configuration
+
+### Tibia 7.72 by Default
+
+The Makefile now always builds for Tibia client version 7.72 instead of 7.70.
+
+**Files modified:**
+- `Makefile` - Added `-DTIBIA772=1` to CFLAGS
+
+---
+
 ## Configurable Rates
 
 ### Experience Rate (Staged)
