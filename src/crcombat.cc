@@ -899,6 +899,7 @@ uint32 TCombat::GetMostDangerousAttacker(void){
 
 void TCombat::DistributeExperiencePoints(uint32 Exp){
 	TCreature *Master = this->Master;
+	Exp *= ExperienceRate;
 	print(3, "%s ist gestorben. Verteile %u EXP...\n", Master->Name, Exp);
 	if(this->CombatDamage == 0){
 		return;
