@@ -33,7 +33,13 @@ int PremiumPlayerBuffer;
 int PremiumNewbieBuffer;
 int Beat;
 int RebootTime;
-int ExperienceRate;
+int ExperienceStageCount;
+TRateStage ExperienceStages[10];
+int LootRate;
+int MagicRate;
+int MeleeRate;
+int DistanceRate;
+int ShieldingRate;
 
 TDatabaseSettings ADMIN_DATABASE;
 TDatabaseSettings VOLATILE_DATABASE;
@@ -45,6 +51,28 @@ int NumberOfQueryManagers;
 TQueryManagerSettings QUERY_MANAGER[10];
 
 static char PasswordKey[9] = "Pm-,o%yD";
+
+static void ReadRateStage(TReadScriptFile &Script, TRateStage Stages[], int &Count, int MaxCount){
+	if(Count >= MaxCount){
+		Script.error("Too many rate stages");
+	}
+	Script.nextToken();
+	if(Script.Token == '('){
+		Script.readSymbol('(');
+		Stages[Count].MinLevel = Script.readNumber();
+		Script.readSymbol(',');
+		Stages[Count].MaxLevel = Script.readNumber();
+		Script.readSymbol(',');
+		Stages[Count].Rate = Script.readNumber();
+		Script.readSymbol(')');
+	}else{
+		// backwards compatible: simple number = all levels
+		Stages[Count].MinLevel = 1;
+		Stages[Count].MaxLevel = 0;
+		Stages[Count].Rate = Script.readNumber();
+	}
+	Count += 1;
+}
 
 static void DisguisePassword(char *Password, char *Key){
 	if(Password == NULL){
@@ -100,7 +128,12 @@ void ReadConfig(void){
 	NumberOfQueryManagers = 0;
 	Beat = 200;
 	RebootTime = 540;
-	ExperienceRate = 1;
+	ExperienceStageCount = 0;
+	LootRate = 1;
+	MagicRate = 1;
+	MeleeRate = 1;
+	DistanceRate = 1;
+	ShieldingRate = 1;
 	ADMIN_DATABASE.Database[0] = 0;
 	VOLATILE_DATABASE.Database[0] = 0;
 	WEB_DATABASE.Database[0] = 0;
@@ -184,7 +217,17 @@ void ReadConfig(void){
 		}else if(strcmp(Identifier, "beat") == 0){
 			Beat = Script.readNumber();
 		}else if(strcmp(Identifier, "experiencerate") == 0){
-			ExperienceRate = Script.readNumber();
+			ReadRateStage(Script, ExperienceStages, ExperienceStageCount, NARRAY(ExperienceStages));
+		}else if(strcmp(Identifier, "lootrate") == 0){
+			LootRate = Script.readNumber();
+		}else if(strcmp(Identifier, "magicrate") == 0){
+			MagicRate = Script.readNumber();
+		}else if(strcmp(Identifier, "meleerate") == 0){
+			MeleeRate = Script.readNumber();
+		}else if(strcmp(Identifier, "distancerate") == 0){
+			DistanceRate = Script.readNumber();
+		}else if(strcmp(Identifier, "shieldingrate") == 0){
+			ShieldingRate = Script.readNumber();
 		}else if(strcmp(Identifier, "admindatabase") == 0){
 			Script.readSymbol('(');
 			strcpy(ADMIN_DATABASE.Product, Script.readIdentifier());
