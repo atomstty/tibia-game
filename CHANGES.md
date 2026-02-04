@@ -127,3 +127,54 @@ shieldingrate = 10
 - `src/config.hh` - Added extern declaration
 - `src/config.cc` - Added parsing and initialization
 - `src/crcombat.cc` - Applied rate in `GetDefendDamage()`
+
+---
+
+## Death Penalty Settings
+
+### Experience/Skill Loss
+
+Configurable percentage of experience and skill points lost on death.
+
+**Config syntax:**
+```
+deathpenalty = 10
+deathpenaltypromoted = 7
+```
+
+**Default:** `10` for non-promoted, `7` for promoted players
+
+**Notes:**
+- Blessings still reduce the loss by 1% each (up to 5 blessings)
+- Set to `0` to disable exp/skill loss entirely
+
+**Files modified:**
+- `src/config.hh` - Added extern declarations
+- `src/config.cc` - Added parsing and initialization
+- `src/crplayer.cc` - Applied config in `TPlayer::Death()`
+
+---
+
+### Item Drop on Death
+
+Configurable item drop chance and container behavior on death.
+
+**Config syntax:**
+```
+itemdropchance = 10
+dropcontainersondeath = true
+```
+
+**Default:** `itemdropchance = 10` (10% chance per item), `dropcontainersondeath = true`
+
+**Notes:**
+- `itemdropchance` is "1 in N" chance (10 = 10% chance to drop each non-container item)
+- Set `itemdropchance = 0` to disable random item drops
+- Set `dropcontainersondeath = false` to keep backpacks on death
+- Amulet of Loss and KEEP_INVENTORY right still prevent all item loss
+- Playerkiller flag still forces all items to drop
+
+**Files modified:**
+- `src/config.hh` - Added extern declarations
+- `src/config.cc` - Added parsing and initialization
+- `src/crmain.cc` - Applied config in `TCreature::~TCreature()`

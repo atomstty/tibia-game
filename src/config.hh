@@ -69,6 +69,12 @@ extern TDatabaseSettings MANAGER_DATABASE;
 extern int NumberOfQueryManagers;
 extern TQueryManagerSettings QUERY_MANAGER[10];
 
+// Death penalty settings
+extern int DeathPenaltyPercent;         // Base exp/skill loss for non-promoted (default: 10)
+extern int DeathPenaltyPromotedPercent; // Base exp/skill loss for promoted (default: 7)
+extern int ItemDropChance;              // Chance to drop non-container items: 1 in N (default: 10)
+extern bool DropContainersOnDeath;      // Whether containers always drop on death (default: true)
+
 void ReadConfig(void);
 
 #endif //TIBIA_CONFIG_HH_

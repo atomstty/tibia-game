@@ -50,6 +50,12 @@ TDatabaseSettings MANAGER_DATABASE;
 int NumberOfQueryManagers;
 TQueryManagerSettings QUERY_MANAGER[10];
 
+// Death penalty settings
+int DeathPenaltyPercent;
+int DeathPenaltyPromotedPercent;
+int ItemDropChance;
+bool DropContainersOnDeath;
+
 static char PasswordKey[9] = "Pm-,o%yD";
 
 static void ReadRateStage(TReadScriptFile &Script, TRateStage Stages[], int &Count, int MaxCount){
@@ -139,6 +145,10 @@ void ReadConfig(void){
 	WEB_DATABASE.Database[0] = 0;
 	FORUM_DATABASE.Database[0] = 0;
 	MANAGER_DATABASE.Database[0] = 0;
+	DeathPenaltyPercent = 10;
+	DeathPenaltyPromotedPercent = 7;
+	ItemDropChance = 10;
+	DropContainersOnDeath = true;
 
 	char FileName[4096];
 #if 0
@@ -228,6 +238,14 @@ void ReadConfig(void){
 			DistanceRate = Script.readNumber();
 		}else if(strcmp(Identifier, "shieldingrate") == 0){
 			ShieldingRate = Script.readNumber();
+		}else if(strcmp(Identifier, "deathpenalty") == 0){
+			DeathPenaltyPercent = Script.readNumber();
+		}else if(strcmp(Identifier, "deathpenaltypromoted") == 0){
+			DeathPenaltyPromotedPercent = Script.readNumber();
+		}else if(strcmp(Identifier, "itemdropchance") == 0){
+			ItemDropChance = Script.readNumber();
+		}else if(strcmp(Identifier, "dropcontainersondeath") == 0){
+			DropContainersOnDeath = (strcmp(Script.readIdentifier(), "true") == 0);
 		}else if(strcmp(Identifier, "admindatabase") == 0){
 			Script.readSymbol('(');
 			strcpy(ADMIN_DATABASE.Product, Script.readIdentifier());
