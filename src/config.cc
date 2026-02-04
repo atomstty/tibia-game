@@ -73,9 +73,10 @@ static void ReadRateStage(TReadScriptFile &Script, TRateStage Stages[], int &Cou
 		Script.readSymbol(')');
 	}else{
 		// backwards compatible: simple number = all levels
+		// NOTE: nextToken() already consumed the token, so use getNumber() not readNumber()
 		Stages[Count].MinLevel = 1;
 		Stages[Count].MaxLevel = 0;
-		Stages[Count].Rate = Script.readNumber();
+		Stages[Count].Rate = Script.getNumber();
 	}
 	Count += 1;
 }
